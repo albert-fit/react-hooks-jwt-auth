@@ -1,5 +1,8 @@
 import axios from "axios";
 import authHeader from "./auth-header";
+import AuthService from "../services/auth.service";
+
+const currentUser = AuthService.getCurrentUser();
 
 const API_URL = "http://localhost:8080/api/test/";
 

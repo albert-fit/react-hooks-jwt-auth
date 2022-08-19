@@ -26,15 +26,6 @@ const validEmail = (value) => {
   }
 };
 
-const vusername = (value) => {
-  if (value.length < 3 || value.length > 20) {
-    return (
-      <div className="alert alert-danger" role="alert">
-        The username must be between 3 and 20 characters.
-      </div>
-    );
-  }
-};
 
 const vpassword = (value) => {
   if (value.length < 6 || value.length > 40) {
@@ -46,19 +37,38 @@ const vpassword = (value) => {
   }
 };
 
+const vconfirmPassword = (value, {password}) => {
+  
+  if (value !== password){
+    return(
+      <div className="alert alert-danger" role="alert">
+      The password and confirm password do not match!
+    </div>
+    );
+  }
+}
+
 const Register = () => {
   const form = useRef();
   const checkBtn = useRef();
 
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [first_name, setFirst_Name] = useState("");
+  const [last_name, setLast_Name] = useState("");
+  const [company, setCompany] = useState("");
+  const [job, setJob] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [successful, setSuccessful] = useState(false);
   const [message, setMessage] = useState("");
 
-  const onChangeUsername = (e) => {
-    const username = e.target.value;
-    setUsername(username);
+  const onChangeFirstName = (e) => {
+    const first_name = e.target.value;
+    setFirst_Name(first_name);
+  };
+  const onChangeLastName = (e) => {
+    const last_name = e.target.value;
+    setLast_Name(last_name);
   };
 
   const onChangeEmail = (e) => {
@@ -66,9 +76,24 @@ const Register = () => {
     setEmail(email);
   };
 
+  const onChangeCompany = (e) => {
+    const company = e.target.value;
+    setCompany(company);
+  };
+
+  const onChangeJob = (e) => {
+    const job = e.target.value;
+    setJob(job);
+  };
+
   const onChangePassword = (e) => {
     const password = e.target.value;
     setPassword(password);
+  };
+
+  const onChangeConfirmPassword = (e) => {
+    const confirmPassword = e.target.value;
+    setConfirmPassword(confirmPassword);
   };
 
   const handleRegister = (e) => {
@@ -80,7 +105,7 @@ const Register = () => {
     form.current.validateAll();
 
     if (checkBtn.current.context._errors.length === 0) {
-      AuthService.register(username, email, password).then(
+      AuthService.register(email, first_name, last_name, company, job, password).then(
         (response) => {
           setMessage(response.data.message);
           setSuccessful(true);
@@ -113,18 +138,6 @@ const Register = () => {
           {!successful && (
             <div>
               <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <Input
-                  type="text"
-                  className="form-control"
-                  name="username"
-                  value={username}
-                  onChange={onChangeUsername}
-                  validations={[required, vusername]}
-                />
-              </div>
-
-              <div className="form-group">
                 <label htmlFor="email">Email</label>
                 <Input
                   type="text"
@@ -137,14 +150,74 @@ const Register = () => {
               </div>
 
               <div className="form-group">
+                <label htmlFor="first_name">First Name</label>
+                <Input
+                  type="text"
+                  className="form-control"
+                  name="first_name"
+                  value={first_name}
+                  onChange={onChangeFirstName}
+                  validations={[required]}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="last_name">Last Name</label>
+                <Input
+                  type="text"
+                  className="form-control"
+                  name="last_name"
+                  value={last_name}
+                  onChange={onChangeLastName}
+                  validations={[required]}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="company">Company</label>
+                <Input
+                  type="text"
+                  className="form-control"
+                  name="company"
+                  value={company}
+                  onChange={onChangeCompany}
+                  validations={[required]}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="job-role">Job Role</label>
+                <Input
+                  type="text"
+                  className="form-control"
+                  name="job"
+                  value={job}
+                  onChange={onChangeJob}
+                  validations={[required]}
+                />
+              </div>
+
+              <div className="form-group">
                 <label htmlFor="password">Password</label>
                 <Input
-                  type="password"
+                  type="text"
                   className="form-control"
                   name="password"
                   value={password}
                   onChange={onChangePassword}
                   validations={[required, vpassword]}
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="confirm-password">Confirm Password</label>
+                <Input
+                  type="Text"
+                  className="form-control"
+                  name="confirm-password"
+                  value={confirmPassword}
+                  password={password}
+                  onChange={onChangeConfirmPassword}
+                  validations={[required, vconfirmPassword]}
                 />
               </div>
 
